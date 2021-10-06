@@ -2,7 +2,7 @@
 
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
-const { sqlForPartialUpdate } = require("../helpers/sql");
+const { sqlForPartialUpdate, sqlForSearch } = require("../helpers/sql");
 
 /** Related functions for companies. */
 
@@ -100,29 +100,27 @@ class Company {
     //  if (searchValue.numLike)
     // return name matching that company name
     // Manage any input errors immediately
-    
-    
-    if (searchValues.minEmployees > searchValues.maxEmployees) {
+
+    if (Number(searchValues.minEmployees) > Number(searchValues.maxEmployees)) {
       throw new BadRequestError("Invalid Response");
     }
 
     // create SQL strings that will be inputted into the final SQL query
 
-    const querySql = `
-      UPDATE companies
-      SET ${setCols}
-        WHERE handle = ${handleVarIdx}
-        RETURNING handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl"`;
+    // deconstruct and place in search function,
 
-    let sqlMinEmployees = `num_employees > ${minEmployees}`;
-    let sqlMaxEmployees = `num_employees < ${maxEmployees}`;
-    let sqlNameLike = `lower(first_name) = $1
-    OR lower(last_name) = $1
-    OR (lower(first_name) = $1 and lower(last_name) = $2)
-    OR (lower(first_name) = $2 and lower(last_name) = $1)`;
+    const { whereSql, values } = sqlForSearch(searchValues);
 
+    const querySql = ` 
+      SELECT handle, name, 
+        description, num_employees AS "numEmployees", 
+        logo_url AS "logoUrl"
+        FROM companies
+        WHERE ${whereSql}
+       `;
 
-    const result = db.query(`SELECT `);
+    const result = db.query(querySql, [...values]);
+    return result.rows;
   }
 
   /** Update company data with `data`.

@@ -30,35 +30,46 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 /** Function receives two objects, returns a new object
  *
  * return {
- *    minEmployees: `num_employees > $${idx+1}`,
- *    maxEmployees: `num_employees < $${idx+1}`,
- *    names: ``
- *    values: [${dataToSearch.minEmployees}, 
- *              ${dataToSearch.maxEmployees}, 
+ *    whereMin: `num_employees > $${idx+1}`,
+ *    whereMax: `num_employees < $${idx+1}`,
+ *    whereName: `ILIKE %names%`
+ *    values: [${dataToSearch.minEmployees},
+ *              ${dataToSearch.maxEmployees},
  *              ${dataToSearch.names}]
  *    };
  *
  * */
 
- function sqlForSearch(dataToSearch, jsToSql) {
-  const keys = Object.keys(dataToUpdate);
-  const { searchMinEmployees, searchMaxEmployees, searchNames } = dataToUpdate;
+function sqlForSearch(dataToSearch) {
+  const keys = Object.keys(dataToSearch);
+  const { minEmployees, maxEmployees, name } = dataToSearch;
+
   if (keys.length === 0) throw new BadRequestError("No data");
 
-  if (searchMinEmployees) {
-    `$"${jsToSql[colName] || colName}"`
+  let whereMin, whereMax, whereName;
+  const whereSql = [];
+
+  if (minEmployees) {
+    whereMin = `num_employees > $${keys.indexOf(minEmployees)}`;
+    whereSql.push({ whereMin });
   }
 
-  // {firstName: 'Aliya', age: 32} => ['"first_name"=$1', '"age"=$2']
-  // Takes actual column name from the sql
-  const cols = keys.map(
-    (colName, idx) => `"${jsToSql[colName] || colName}"=$${idx + 1}`
-  );
+  if (maxEmployees) {
+    whereMax = `num_employees > $${keys.indexOf(maxEmployees)}`;
+    whereSql.push({ whereMax });
+  }
+
+  if (name) {
+    whereName = `ILIKE %${name}%`;
+    whereSql.push({ whereName });
+  }
+
+  const where = whereSql.join(" AND ");
 
   return {
-    setCols: cols.join(", "),
-    values: Object.values(dataToUpdate),
+    where,
+    values: Object.values(dataToSearch),
   };
 }
 
-module.exports = { sqlForPartialUpdate };
+module.exports = { sqlForPartialUpdate, sqlForSearch };
