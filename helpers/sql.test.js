@@ -1,5 +1,5 @@
 const { BadRequestError } = require("../expressError");
-const { sqlForPartialUpdate } = require("./sql");
+const { sqlForPartialUpdate, sqlForSearch} = require("./sql");
 
 /**  */
 
@@ -33,4 +33,55 @@ describe("Create partial update", function () {
   });
 });
 
+describe("Create sql", function () {
+  const dataToSearch = {
+    "minEmployees": "10", 
+    "maxEmployees": "500", 
+    "name": "baker"};
 
+  const dataToSearch2 = {
+    "minEmployees": "10", 
+    "name": "baker"
+  };
+
+  const dataToSearch3 = {
+    "minEmployees": "10"
+  };
+
+  const dataToSearch4 = {};
+
+  test("works with three inputs", function () {
+    const result = sqlForSearch(dataToSearch);
+
+    expect(result).toEqual({
+      where: `num_employees > $1 AND num_employees > $2 AND ILIKE %$3%`,
+      values: ['10', '500', 'baker']
+      });
+  });
+
+  test("works with two inputs", function () {
+    const result = sqlForSearch(dataToSearch2);
+
+    expect(result).toEqual({
+      where: `num_employees > $1 AND ILIKE %$2%`,
+      values: ['10', 'baker']
+      });
+  });
+
+  test("works with one input", function () {
+    const result = sqlForSearch(dataToSearch3);
+
+    expect(result).toEqual({
+      where: `num_employees > $1`,
+      values: ['10']
+      });
+  });
+
+  test("works with no inputs", function () {
+    try {
+      const result = sqlForSearch(dataToSearch4);
+    } catch (err) {
+      expect (err instanceof BadRequestError).toBeTruthy();
+    }
+  });
+});

@@ -27,22 +27,25 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 
-/** Function receives two objects, returns a new object
- *
+/** Function takes an object with search criteria
+ *  for minEmployees and/or maxEmployees and/or name
+ * 
  * return {
- *    whereMin: `num_employees > $${idx+1}`,
- *    whereMax: `num_employees < $${idx+1}`,
- *    whereName: `ILIKE %names%`
+ *    where: `num_employees > $${idx+1}`
+ *        AND `num_employees < $${idx+1}`
+ *        AND `ILIKE %names%`,
  *    values: [${dataToSearch.minEmployees},
  *              ${dataToSearch.maxEmployees},
  *              ${dataToSearch.names}]
- *    };
- *
+ *  };
  * */
 
 function sqlForSearch(dataToSearch) {
   const keys = Object.keys(dataToSearch);
+  console.log("keys:", keys);
+  
   const { minEmployees, maxEmployees, name } = dataToSearch;
+  // console.log("minEmployees:", keys.indexOf('minEmployees')+1);
 
   if (keys.length === 0) throw new BadRequestError("No data");
 
@@ -50,18 +53,18 @@ function sqlForSearch(dataToSearch) {
   const whereSql = [];
 
   if (minEmployees) {
-    whereMin = `num_employees > $${keys.indexOf(minEmployees)}`;
-    whereSql.push({ whereMin });
+    whereMin = `num_employees > $${keys.indexOf('minEmployees')+1}`;
+    whereSql.push(whereMin);
   }
 
   if (maxEmployees) {
-    whereMax = `num_employees > $${keys.indexOf(maxEmployees)}`;
-    whereSql.push({ whereMax });
+    whereMax = `num_employees > $${keys.indexOf('maxEmployees')+1}`;
+    whereSql.push(whereMax);
   }
 
   if (name) {
-    whereName = `ILIKE %${name}%`;
-    whereSql.push({ whereName });
+    whereName = `ILIKE %$${keys.indexOf('name')+1}%`;
+    whereSql.push(whereName);
   }
 
   const where = whereSql.join(" AND ");
