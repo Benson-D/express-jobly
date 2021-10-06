@@ -89,6 +89,28 @@ class Company {
     return company;
   }
 
+  /** Find min or max employess, or nameLike */
+  static async search(searchValues) {
+    //  If (searchValue.minemployess > searchValue.maxemployess)
+    // Throw badreques
+    // if (searchValue.minemployess)
+    // return the number = or greater than that number
+    // if (searhValue.maxemployees)
+    // return the number = or less than that number
+    //  if (searchValue.numLike)
+    // return name matching that company name
+
+    let sqlMinEmployees = "";
+    let sqlMaxEmployees = "";
+    let sqlNameLike = "";
+
+    if (searchValues.minemployees > searchValues.maxemployees) {
+      throw new BadRequestError("Invalid Response");
+    }
+
+    const result = db.query(`SELECT `);
+  }
+
   /** Update company data with `data`.
    *
    * This is a "partial update" --- it's fine if data doesn't contain all the
