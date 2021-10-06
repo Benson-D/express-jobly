@@ -99,14 +99,28 @@ class Company {
     // return the number = or less than that number
     //  if (searchValue.numLike)
     // return name matching that company name
-
-    let sqlMinEmployees = "";
-    let sqlMaxEmployees = "";
-    let sqlNameLike = "";
-
-    if (searchValues.minemployees > searchValues.maxemployees) {
+    // Manage any input errors immediately
+    
+    
+    if (searchValues.minEmployees > searchValues.maxEmployees) {
       throw new BadRequestError("Invalid Response");
     }
+
+    // create SQL strings that will be inputted into the final SQL query
+
+    const querySql = `
+      UPDATE companies
+      SET ${setCols}
+        WHERE handle = ${handleVarIdx}
+        RETURNING handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl"`;
+
+    let sqlMinEmployees = `num_employees > ${minEmployees}`;
+    let sqlMaxEmployees = `num_employees < ${maxEmployees}`;
+    let sqlNameLike = `lower(first_name) = $1
+    OR lower(last_name) = $1
+    OR (lower(first_name) = $1 and lower(last_name) = $2)
+    OR (lower(first_name) = $2 and lower(last_name) = $1)`;
+
 
     const result = db.query(`SELECT `);
   }
