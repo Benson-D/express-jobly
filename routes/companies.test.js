@@ -294,4 +294,4 @@ describe("DELETE /companies/:handle", function () {
   });
 });
 
-// TO DO: Add route tests for search
+

@@ -38,7 +38,7 @@ describe("POST /users", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("works for users: create admin", async function () {
+  test("works for admin: create admin", async function () {
     const resp = await request(app)
         .post("/users")
         .send({
@@ -164,7 +164,7 @@ describe("GET /users", function () {
 /************************************** GET /users/:username */
 
 describe("GET /users/:username", function () {
-  test("works for users", async function () {
+  test("works for same user", async function () {
     const resp = await request(app)
         .get(`/users/u1`)
         .set("authorization", `Bearer ${u1Token}`);
@@ -200,7 +200,7 @@ describe("GET /users/:username", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("not found if user not found", async function () {
+  test("unauth if user not found", async function () {
     const resp = await request(app)
         .get(`/users/nope`)
         .set("authorization", `Bearer ${u1Token}`);
@@ -211,7 +211,7 @@ describe("GET /users/:username", function () {
 /************************************** PATCH /users/:username */
 
 describe("PATCH /users/:username", () => {
-  test("works for users", async function () {
+  test("works for same user", async function () {
     const resp = await request(app)
         .patch(`/users/u1`)
         .send({
@@ -256,7 +256,7 @@ describe("PATCH /users/:username", () => {
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("not found if no such user", async function () {
+  test("unauth if no such user", async function () {
     const resp = await request(app)
         .patch(`/users/nope`)
         .send({
@@ -300,7 +300,7 @@ describe("PATCH /users/:username", () => {
 /************************************** DELETE /users/:username */
 
 describe("DELETE /users/:username", function () {
-  test("works for users", async function () {
+  test("works for same user", async function () {
     const resp = await request(app)
         .delete(`/users/u1`)
         .set("authorization", `Bearer ${u1Token}`);
@@ -320,7 +320,7 @@ describe("DELETE /users/:username", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("not found if user missing", async function () {
+  test("unauth if user missing", async function () {
     const resp = await request(app)
         .delete(`/users/nope`)
         .set("authorization", `Bearer ${u1Token}`);

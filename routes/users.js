@@ -23,7 +23,7 @@ const router = express.Router();
  * This returns the newly created user and an authentication token for them:
  *  {user: { username, firstName, lastName, email, isAdmin }, token }
  *
- * Authorization required: login
+ * Authorization required: Admin
  **/
 
 router.post("/", ensureAdmin, async function (req, res, next) {
@@ -42,7 +42,7 @@ router.post("/", ensureAdmin, async function (req, res, next) {
  *
  * Returns list of all users.
  *
- * Authorization required: login
+ * Authorization required: Admin
  **/
 
 router.get("/", ensureAdmin, async function (req, res, next) {
@@ -54,7 +54,7 @@ router.get("/", ensureAdmin, async function (req, res, next) {
  *
  * Returns { username, firstName, lastName, isAdmin }
  *
- * Authorization required: login
+ * Authorization required: User or Admin
  **/
 
 router.get("/:username", ensureAdminOrSameUser, async function (req, res, next) {
@@ -69,7 +69,7 @@ router.get("/:username", ensureAdminOrSameUser, async function (req, res, next) 
  *
  * Returns { username, firstName, lastName, email, isAdmin }
  *
- * Authorization required: login
+ * Authorization required: User or Admin
  **/
 
 router.patch("/:username", ensureAdminOrSameUser, async function (req, res, next) {
@@ -85,7 +85,7 @@ router.patch("/:username", ensureAdminOrSameUser, async function (req, res, next
 
 /** DELETE /[username]  =>  { deleted: username }
  *
- * Authorization required: login
+ * Authorization required: User or Admin
  **/
 
 router.delete("/:username", ensureAdminOrSameUser, async function (req, res, next) {

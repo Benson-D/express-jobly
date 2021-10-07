@@ -65,11 +65,14 @@ function ensureAdmin(req, res, next) {
 
 function ensureAdminOrSameUser(req, res, next) {
   try {
-    const sameUser = req.params.username;
-    if (res.locals.user.isAdmin || sameUser === res.locals.user.username){
-      return next();
+    const user = req.params.username;
+    // console.log("res,", res);
+    // console.log("res.locals,", res.locals);
+    // console.log("res.locals.user,", res.locals.user);
+    if ((!res.locals.user) || !(res.locals.user.isAdmin || user === res.locals.user.username)){
+      throw new UnauthorizedError();
     }
-    throw new UnauthorizedError();
+    return next();
   } catch (err) {
     return next(err);
   }

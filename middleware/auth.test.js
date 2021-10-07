@@ -140,4 +140,16 @@ describe("ensureAdminOrSameUser", function () {
     };
     ensureAdminOrSameUser(req, res, next);
   });
+
+  test("unauth if not logged in", function () {
+    expect.assertions(1);
+    const req = { params: { username: "test2" } };
+    const res = { locals: { user: {} }};
+
+    const next = function (err) {
+      console.log(err, "error");
+      expect(err instanceof UnauthorizedError).toBeTruthy();
+    };
+    ensureAdminOrSameUser(req, res, next);
+  });
 });

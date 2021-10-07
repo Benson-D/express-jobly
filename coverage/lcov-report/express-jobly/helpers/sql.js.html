@@ -144,10 +144,7 @@
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,45 +187,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,10 +233,9 @@
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { BadRequestError } = require("../expressError");
 &nbsp;
-&nbsp;
 /** Function takes in two objects:
  *    TO DO: Add examples of each
- *    First object: key=value pairs of column name and update value 
+ *    First object: key=value pairs of column name and update value
  *    Second object: key=value pairs of JSNames and SQL names
  *
  * returns: {
@@ -265,20 +260,19 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 &nbsp;
-&nbsp;
 /** Function takes an object with search criteria
  *  for minEmployees and/or maxEmployees and/or name
  *
  * returns: {
- *    where: `num_employees &gt; $1 
- *        AND num_employees &lt; $2 
+ *    where: `num_employees &gt; $1
+ *        AND num_employees &lt; $2
  *        AND name LIKE $3`,
  *    values: ['10', '500', '%baker%']
  *  };
  * */
 &nbsp;
 // TO DO: Move to company.js model
-function sqlForSearch(dataToSearch) {
+function sqlForByNumEmployeesOrName(dataToSearch) {
   // If there are no keys in the object, return a BadRequestError
   const keys = Object.keys(dataToSearch);
   if (keys.length === 0) throw new BadRequestError("No data");
@@ -313,7 +307,7 @@ function sqlForSearch(dataToSearch) {
     whereSql.push(whereName);
   }
 &nbsp;
-  // Convert whereSql into a string combined with AND so that it's 
+  // Convert whereSql into a string combined with AND so that it's
   // SQL query friendly
   const where = whereSql.join(" AND ");
 &nbsp;
@@ -323,7 +317,7 @@ function sqlForSearch(dataToSearch) {
   };
 }
 &nbsp;
-module.exports = { sqlForPartialUpdate, sqlForSearch };
+module.exports = { sqlForPartialUpdate, sqlForByNumEmployeesOrName };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -331,7 +325,7 @@ module.exports = { sqlForPartialUpdate, sqlForSearch };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Oct 07 2021 12:40:25 GMT-0500 (Central Daylight Time)
+                at Thu Oct 07 2021 14:42:00 GMT-0700 (Pacific Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
