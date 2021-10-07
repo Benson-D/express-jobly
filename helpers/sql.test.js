@@ -54,8 +54,8 @@ describe("Create sql", function () {
     const result = sqlForSearch(dataToSearch);
 
     expect(result).toEqual({
-      where: `num_employees > $1 AND num_employees > $2 AND ILIKE %$3%`,
-      values: ['10', '500', 'baker']
+      where: `num_employees > $1 AND num_employees < $2 AND name LIKE $3`,
+      values: ['10', '500', '%baker%']
       });
   });
 
@@ -63,8 +63,8 @@ describe("Create sql", function () {
     const result = sqlForSearch(dataToSearch2);
 
     expect(result).toEqual({
-      where: `num_employees > $1 AND ILIKE %$2%`,
-      values: ['10', 'baker']
+      where: `num_employees > $1 AND name LIKE $2`,
+      values: ['10', '%baker%']
       });
   });
 

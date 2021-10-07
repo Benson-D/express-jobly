@@ -1,8 +1,9 @@
 const { BadRequestError } = require("../expressError");
 
-// THIS NEEDS SOME GREAT DOCUMENTATION.
 
-/** Function recieves two objects, returns a new object
+/** Function receives two objects:
+ *    First object contains key=value pairs of column name and update value
+ *    Second object contains key=value pairs of JSNames and SQL names
  *
  * return {
  *    setCols: "first_name=$1, age=$2",
@@ -27,31 +28,30 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 
+
 /** Function takes an object with search criteria
  *  for minEmployees and/or maxEmployees and/or name
  *
- * return {
- *    where: `num_employees > $${idx+1}`
- *        AND `num_employees < $${idx+1}`
- *        AND `ILIKE %names%`,
- *    values: [${dataToSearch.minEmployees},
- *              ${dataToSearch.maxEmployees},
- *              ${dataToSearch.names}]
+ * returns: {
+ *    where: `num_employees > $1 
+ *        AND num_employees < $2 
+ *        AND name LIKE $3`,
+ *    values: ['10', '500', '%baker%']
  *  };
  * */
 
 function sqlForSearch(dataToSearch) {
+  // If there is a search for name, format the name to be SQL friendly
   if (dataToSearch.name) {
     dataToSearch.name = `%${dataToSearch.name}%`;
   }
 
+  // If there are no keys in the object, return a BadRequestError
   const keys = Object.keys(dataToSearch);
+  if (keys.length === 0) throw new BadRequestError("No data");
   console.log("keys:", keys);
 
   const { minEmployees, maxEmployees, name } = dataToSearch;
-  // console.log("minEmployees:", keys.indexOf('minEmployees')+1);
-
-  if (keys.length === 0) throw new BadRequestError("No data");
 
   let whereMin, whereMax, whereName;
   const whereSql = [];
@@ -66,12 +66,13 @@ function sqlForSearch(dataToSearch) {
     whereSql.push(whereMax);
   }
 
-  // $3  %value%
   if (name) {
     whereName = `name LIKE $${keys.indexOf("name") + 1}`;
     whereSql.push(whereName);
   }
 
+  // Convert whereSql into a string combined with AND so that it's 
+  // SQL query friendly
   const where = whereSql.join(" AND ");
 
   return {

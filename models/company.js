@@ -89,31 +89,28 @@ class Company {
     return company;
   }
 
-  /** Find min or max employess, or nameLike */
+  /** Given an object with minEmployees, maxEmployees or name
+   *  Returns an array of companies that fit the criteria.
+   *  Throws an error if there is fault logic in Min and Max
+   *  Employees.
+   * 
+   *  Returns: [{
+   *     description: "Desc1",
+   *     handle: "c1",
+   *     logoUrl: "http://c1.img",
+   *     name: "C1",
+   *     numEmployees: 1,
+   *   },...]
+   */
   static async search(searchValues) {
-    //  If (searchValue.minemployess > searchValue.maxemployess)
-    // Throw badreques
-    // if (searchValue.minemployess)
-    // return the number = or greater than that number
-    // if (searhValue.maxemployees)
-    // return the number = or less than that number
-    //  if (searchValue.numLike)
-    // return name matching that company name
-    // Manage any input errors immediately
-
     if (Number(searchValues.minEmployees) > Number(searchValues.maxEmployees)) {
       throw new BadRequestError("Invalid Response");
     }
-
-    // create SQL strings that will be inputted into the final SQL query
-
-    // deconstruct and place in search function,
-
     console.log(searchValues, "search values");
 
     const { where, values } = sqlForSearch(searchValues);
-    console.log(where, "where claus");
-    console.log([...values], "valueS!!!!!!!");
+    console.log(where, "where clause");
+    console.log([...values], "values");
 
     const querySql = ` 
       SELECT handle, name, 
