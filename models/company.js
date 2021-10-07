@@ -2,7 +2,10 @@
 
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
-const { sqlForPartialUpdate, sqlForSearch } = require("../helpers/sql");
+const {
+  sqlForPartialUpdate,
+  sqlForByNumEmployeesOrName,
+} = require("../helpers/sql");
 
 /** Related functions for companies. */
 
@@ -93,7 +96,7 @@ class Company {
    *  Returns an array of companies that fit the criteria.
    *  Throws an error if there is fault logic in Min and Max
    *  Employees.
-   * 
+   *
    *  Returns: [{
    *     description: "Desc1",
    *     handle: "c1",
@@ -109,7 +112,7 @@ class Company {
     }
     console.log(searchValues, "search values");
 
-    const { where, values } = sqlForSearch(searchValues);
+    const { where, values } = sqlForByNumEmployeesOrName(searchValues);
     console.log(where, "where clause");
     console.log([...values], "values");
 

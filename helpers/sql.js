@@ -1,9 +1,8 @@
 const { BadRequestError } = require("../expressError");
 
-
 /** Function takes in two objects:
  *    TO DO: Add examples of each
- *    First object: key=value pairs of column name and update value 
+ *    First object: key=value pairs of column name and update value
  *    Second object: key=value pairs of JSNames and SQL names
  *
  * returns: {
@@ -28,20 +27,19 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 
-
 /** Function takes an object with search criteria
  *  for minEmployees and/or maxEmployees and/or name
  *
  * returns: {
- *    where: `num_employees > $1 
- *        AND num_employees < $2 
+ *    where: `num_employees > $1
+ *        AND num_employees < $2
  *        AND name LIKE $3`,
  *    values: ['10', '500', '%baker%']
  *  };
  * */
 
 // TO DO: Move to company.js model
-function sqlForSearch(dataToSearch) {
+function sqlForByNumEmployeesOrName(dataToSearch) {
   // If there are no keys in the object, return a BadRequestError
   const keys = Object.keys(dataToSearch);
   if (keys.length === 0) throw new BadRequestError("No data");
@@ -76,7 +74,7 @@ function sqlForSearch(dataToSearch) {
     whereSql.push(whereName);
   }
 
-  // Convert whereSql into a string combined with AND so that it's 
+  // Convert whereSql into a string combined with AND so that it's
   // SQL query friendly
   const where = whereSql.join(" AND ");
 
@@ -86,4 +84,4 @@ function sqlForSearch(dataToSearch) {
   };
 }
 
-module.exports = { sqlForPartialUpdate, sqlForSearch };
+module.exports = { sqlForPartialUpdate, sqlForByNumEmployeesOrName };
