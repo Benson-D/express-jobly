@@ -227,3 +227,5 @@ describe("DELETE /companies/:handle", function () {
     expect(resp.statusCode).toEqual(404);
   });
 });
+
+// TO DO: Add route tests for search

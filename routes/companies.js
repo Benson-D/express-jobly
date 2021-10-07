@@ -6,7 +6,7 @@ const jsonschema = require("jsonschema");
 const express = require("express");
 
 const { BadRequestError } = require("../expressError");
-const { ensureLoggedIn } = require("../middleware/auth");
+const { ensureLoggedIn, ensureAdmin } = require("../middleware/auth");
 const Company = require("../models/company");
 
 const companyNewSchema = require("../schemas/companyNew.json");
@@ -50,6 +50,10 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 
 router.get("/", async function (req, res, next) {
   let companies;
+  // Adding a validator here is a convenience less than security
+  // Opportunity to convert minEmployees and maxEmployees to num 
+  // here instead of Search
+  // TO DO: Refactor .findAll() to take in req.query
   if (Object.keys(req.query).length > 0) {
     companies = await Company.search(req.query);
   } else {

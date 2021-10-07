@@ -115,6 +115,7 @@ describe("get", function () {
 
 /**************************************** search */
 describe("search", function () {
+  // TO DO: Update variable names to be more clear (i.e. valid vs. invalid)
   const dataToSearch = {
     minEmployees: "300",
     maxEmployees: "200",
@@ -137,6 +138,7 @@ describe("search", function () {
       fail();
     } catch (err) {
       expect(err instanceof BadRequestError).toBeTruthy();
+      // Expect error message... 
     }
   });
 
@@ -174,8 +176,11 @@ describe("search", function () {
       fail();
     } catch (err) {
       expect(err instanceof BadRequestError).toBeTruthy();
+      // Error message...
     }
   });
+
+  // TO DO: If additional filters added
 });
 
 /************************************** update */

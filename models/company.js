@@ -102,9 +102,10 @@ class Company {
    *     numEmployees: 1,
    *   },...]
    */
+  // TO DO: Update .findAll() to take in req.query that can search
   static async search(searchValues) {
     if (Number(searchValues.minEmployees) > Number(searchValues.maxEmployees)) {
-      throw new BadRequestError("Invalid Response");
+      throw new BadRequestError("Invalid Request");
     }
     console.log(searchValues, "search values");
 

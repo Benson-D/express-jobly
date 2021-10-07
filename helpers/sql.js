@@ -2,7 +2,8 @@ const { BadRequestError } = require("../expressError");
 
 
 /** Function takes in two objects:
- *    First object: key=value pairs of column name and update value
+ *    TO DO: Add examples of each
+ *    First object: key=value pairs of column name and update value 
  *    Second object: key=value pairs of JSNames and SQL names
  *
  * returns: {
@@ -39,16 +40,17 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
  *  };
  * */
 
+// TO DO: Move to company.js model
 function sqlForSearch(dataToSearch) {
-  // If there is a search for name, format the name to be SQL friendly
-  if (dataToSearch.name) {
-    dataToSearch.name = `%${dataToSearch.name}%`;
-  }
-
   // If there are no keys in the object, return a BadRequestError
   const keys = Object.keys(dataToSearch);
   if (keys.length === 0) throw new BadRequestError("No data");
   console.log("keys:", keys);
+
+  // If there is a search for name, format the name to be SQL friendly
+  if (dataToSearch.name) {
+    dataToSearch.name = `%${dataToSearch.name}%`;
+  }
 
   // Checks if there is a minEmployee, maxEmployee and/or name
   // Creates a string that can be used for a SQL query
@@ -57,6 +59,7 @@ function sqlForSearch(dataToSearch) {
 
   let whereMin, whereMax, whereName;
   const whereSql = [];
+  // Create another array of values and push into it and get the length
 
   if (minEmployees) {
     whereMin = `num_employees > $${keys.indexOf("minEmployees") + 1}`;
