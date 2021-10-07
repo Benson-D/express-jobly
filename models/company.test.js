@@ -113,6 +113,71 @@ describe("get", function () {
   });
 });
 
+/**************************************** search */
+describe("search", function () {
+  const dataToSearch = {
+    minEmployees: "300",
+    maxEmployees: "200",
+    name: "baker",
+  };
+
+  const dataToSearch2 = {
+    maxEmployees: "2",
+  };
+
+  const dataToSearch3 = {
+    minEmployees: "1",
+    maxEmployees: "3",
+    name: "C2",
+  };
+
+  test("minEmployee greater than maxEmployee", async function () {
+    try {
+      await Company.search(dataToSearch);
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  });
+
+  test("find one query", async function () {
+    const response = await Company.search(dataToSearch2);
+
+    expect(response).toEqual([
+      {
+        description: "Desc1",
+        handle: "c1",
+        logoUrl: "http://c1.img",
+        name: "C1",
+        numEmployees: 1,
+      },
+    ]);
+  });
+
+  test("find all queries", async function () {
+    const response = await Company.search(dataToSearch3);
+
+    expect(response).toEqual([
+      {
+        description: "Desc2",
+        handle: "c2",
+        logoUrl: "http://c2.img",
+        name: "C2",
+        numEmployees: 2,
+      },
+    ]);
+  });
+
+  test("find no queries", async function () {
+    try {
+      await Company.search({});
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  });
+});
+
 /************************************** update */
 
 describe("update", function () {

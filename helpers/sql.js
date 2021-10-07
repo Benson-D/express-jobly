@@ -29,7 +29,7 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 
 /** Function takes an object with search criteria
  *  for minEmployees and/or maxEmployees and/or name
- * 
+ *
  * return {
  *    where: `num_employees > $${idx+1}`
  *        AND `num_employees < $${idx+1}`
@@ -41,9 +41,13 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
  * */
 
 function sqlForSearch(dataToSearch) {
+  if (dataToSearch.name) {
+    dataToSearch.name = `%${dataToSearch.name}%`;
+  }
+
   const keys = Object.keys(dataToSearch);
   console.log("keys:", keys);
-  
+
   const { minEmployees, maxEmployees, name } = dataToSearch;
   // console.log("minEmployees:", keys.indexOf('minEmployees')+1);
 
@@ -53,17 +57,18 @@ function sqlForSearch(dataToSearch) {
   const whereSql = [];
 
   if (minEmployees) {
-    whereMin = `num_employees > $${keys.indexOf('minEmployees')+1}`;
+    whereMin = `num_employees > $${keys.indexOf("minEmployees") + 1}`;
     whereSql.push(whereMin);
   }
 
   if (maxEmployees) {
-    whereMax = `num_employees > $${keys.indexOf('maxEmployees')+1}`;
+    whereMax = `num_employees < $${keys.indexOf("maxEmployees") + 1}`;
     whereSql.push(whereMax);
   }
 
+  // $3  %value%
   if (name) {
-    whereName = `ILIKE %$${keys.indexOf('name')+1}%`;
+    whereName = `name LIKE $${keys.indexOf("name") + 1}`;
     whereSql.push(whereName);
   }
 

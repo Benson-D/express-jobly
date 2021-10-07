@@ -109,17 +109,24 @@ class Company {
 
     // deconstruct and place in search function,
 
-    const { whereSql, values } = sqlForSearch(searchValues);
+    console.log(searchValues, "search values");
+
+    const { where, values } = sqlForSearch(searchValues);
+    console.log(where, "where claus");
+    console.log([...values], "valueS!!!!!!!");
 
     const querySql = ` 
       SELECT handle, name, 
         description, num_employees AS "numEmployees", 
         logo_url AS "logoUrl"
         FROM companies
-        WHERE ${whereSql}
+        WHERE ${where}
        `;
 
-    const result = db.query(querySql, [...values]);
+    console.log(querySql, "query");
+    const result = await db.query(querySql, [...values]);
+    console.log(result, "result");
+
     return result.rows;
   }
 
