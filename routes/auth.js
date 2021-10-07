@@ -9,8 +9,8 @@ const express = require("express");
 const router = new express.Router();
 const { createToken } = require("../helpers/tokens");
 const userAuthSchema = require("../schemas/userAuth.json");
-// const userRegisterSchema = require("../schemas/userRegister.json");
-const userNewSchema = require("../schemas/userNew.json");
+const userRegisterSchema = require("../schemas/userRegister.json");
+// const userNewSchema = require("../schemas/userNew.json");
 const { BadRequestError } = require("../expressError");
 
 /** POST /auth/token:  { username, password } => { token }
@@ -43,14 +43,12 @@ router.post("/token", async function (req, res, next) {
  */
 
 router.post("/register", async function (req, res, next) {
-  // Updated userRegisterSchema to userNewSchema, allow isAdmin, could lead to a security risk
 
-  const validator = jsonschema.validate(req.body, userNewSchema);
+  const validator = jsonschema.validate(req.body, userRegisterSchema);
   if (!validator.valid) {
     const errs = validator.errors.map((e) => e.stack);
     throw new BadRequestError(errs);
   }
-  req.body.isAdmin = req.body.isAdmin || false;
 
   const newUser = await User.register({ ...req.body, isAdmin: false });
   const token = createToken(newUser);

@@ -58,14 +58,15 @@ function ensureAdmin(req, res, next) {
   }
 }
 
+/** Middleware to use when they must be an admin or user
+ *
+ * If not, raises Unauthorized.
+ */
+
 function ensureAdminOrSameUser(req, res, next) {
   try {
     const sameUser = req.params.username;
-    if (
-      res.locals.user &&
-      (res.locals.user.isAdmin || sameUser === res.locals.user.username)
-    ) {
-      // Problem having error because not actually have a user
+    if (res.locals.user.isAdmin || sameUser === res.locals.user.username){
       return next();
     }
     throw new UnauthorizedError();

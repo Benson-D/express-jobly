@@ -132,7 +132,7 @@ describe("ensureAdminOrSameUser", function () {
   test("unauth if not admin", function () {
     expect.assertions(1);
     const req = { params: { username: "test2" } };
-    const res = { locals: { username: "test", isAdmin: false } };
+    const res = { locals: { user: { username: "test", isAdmin: false } } };
 
     const next = function (err) {
       console.log(err, "error");
