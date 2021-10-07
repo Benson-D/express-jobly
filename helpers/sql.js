@@ -1,11 +1,11 @@
 const { BadRequestError } = require("../expressError");
 
 
-/** Function receives two objects:
- *    First object contains key=value pairs of column name and update value
- *    Second object contains key=value pairs of JSNames and SQL names
+/** Function takes in two objects:
+ *    First object: key=value pairs of column name and update value
+ *    Second object: key=value pairs of JSNames and SQL names
  *
- * return {
+ * returns: {
  *    setCols: "first_name=$1, age=$2",
  *    values: [Aliya, 32]
  *    };
@@ -17,7 +17,6 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   if (keys.length === 0) throw new BadRequestError("No data");
 
   // {firstName: 'Aliya', age: 32} => ['"first_name"=$1', '"age"=$2']
-  // Takes actual column name from the sql
   const cols = keys.map(
     (colName, idx) => `"${jsToSql[colName] || colName}"=$${idx + 1}`
   );
@@ -51,6 +50,9 @@ function sqlForSearch(dataToSearch) {
   if (keys.length === 0) throw new BadRequestError("No data");
   console.log("keys:", keys);
 
+  // Checks if there is a minEmployee, maxEmployee and/or name
+  // Creates a string that can be used for a SQL query
+  // adds the string to an array called whereSql
   const { minEmployees, maxEmployees, name } = dataToSearch;
 
   let whereMin, whereMax, whereName;

@@ -34,6 +34,7 @@ function authenticateJWT(req, res, next) {
  */
 
 function ensureLoggedIn(req, res, next) {
+  
   try {
     if (!res.locals.user) throw new UnauthorizedError();
     return next();
@@ -49,8 +50,7 @@ function ensureLoggedIn(req, res, next) {
 
 function ensureAdmin(req, res, next) {
   try {
-    const user = User.get(res.locals.user);
-    if (!user || user.is_admin === false) {
+    if (!res.locals.user || res.locals.user.isAdmin === false) {
       throw new UnauthorizedError();
     }
     return next();
@@ -58,9 +58,6 @@ function ensureAdmin(req, res, next) {
     return next(err);
   }
 }
-
-
-// Do we need a function to check for admin?
 
 module.exports = {
   authenticateJWT,
