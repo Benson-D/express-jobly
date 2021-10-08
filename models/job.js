@@ -2,9 +2,7 @@
 
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
-const {
-  sqlForPartialUpdate,
-} = require("../helpers/sql");
+const { sqlForPartialUpdate } = require("../helpers/sql");
 
 /** Related functions for companies. */
 
@@ -18,16 +16,6 @@ class Job {
    * */
 
   static async create({ title, salary, equity, companyHandle }) {
-    // const duplicateCheck = await db.query(
-    //   `SELECT handle
-    //        FROM companies
-    //        WHERE handle = $1`,
-    //   [handle]
-    // );
-
-    // if (duplicateCheck.rows[0])
-    //   throw new BadRequestError(`Duplicate company: ${handle}`);
-
     const result = await db.query(
       `INSERT INTO jobs(
           title,
@@ -88,44 +76,95 @@ class Job {
     return job;
   }
 
-  /** Given an object with minEmployees, maxEmployees or name
-   *  Returns an array of companies that fit the criteria.
-   *  Throws an error if there is fault logic in Min and Max
-   *  Employees.
+  /** Given an object with title, minSalary or hasEquity
+   *  Returns an object, one of where claus's and one of values
    *
-   *  Returns: [{
-   *     description: "Desc1",
-   *     handle: "c1",
-   *     logoUrl: "http://c1.img",
-   *     name: "C1",
-   *     numEmployees: 1,
-   *   },...]
+   * Returns : {
+   *    where: title ILIKE $1 AND salary > $2, equity > 0
+   *    values: ["%title%", 20]
+   * }
+   *
    */
 
-  // static async search(searchValues) {
-  //   if (Number(searchValues.minEmployees) > Number(searchValues.maxEmployees)) {
-  //     throw new BadRequestError("Invalid Request");
-  //   }
-  //   console.log(searchValues, "search values");
+  static sqlForSearch(dataToSearch) {
+    // If there is a search for name, format the name to be SQL friendly
 
-  //   const { where, values } = sqlForByNumEmployeesOrName(searchValues);
-  //   console.log(where, "where clause");
-  //   console.log([...values], "values");
+    if (dataToSearch.title) {
+      dataToSearch.title = `%${dataToSearch.title}%`;
+    }
 
-  //   const querySql = `
-  //     SELECT handle, name,
-  //       description, num_employees AS "numEmployees",
-  //       logo_url AS "logoUrl"
-  //       FROM companies
-  //       WHERE ${where}
-  //      `;
+    // Checks if there is a title, minSalary and/or hasEquity
+    // Creates a string that can be used for a SQL query
+    // adds the string to an array called whereSql
+    const { title, minSalary, hasEquity } = dataToSearch;
 
-  //   console.log(querySql, "query");
-  //   const result = await db.query(querySql, [...values]);
-  //   console.log(result, "result");
+    let whereTitle, whereMinSalary, whereHasEquity;
+    const whereSql = [];
+    const values = [];
+    // Create another array of values and push into it and get the length
 
-  //   return result.rows;
-  // }
+    if (title) {
+      values.push(title);
+      whereTitle = `title ILIKE $${values.length}`;
+      whereSql.push(whereTitle);
+    }
+
+    if (minSalary) {
+      values.push(minSalary);
+      whereMinSalary = `salary > $${values.length}`;
+      whereSql.push(whereMinSalary);
+    }
+
+    if (hasEquity) {
+      whereHasEquity = `equity > 0`;
+      whereSql.push(whereHasEquity);
+    }
+
+    // Convert whereSql into a string combined with AND so that it's
+    // SQL query friendly
+    const where = whereSql.join(" AND ");
+
+    return {
+      where,
+      values,
+    };
+  }
+
+  /**
+   *
+   * Function returns an array of jobs that fit the criteria
+   *
+   * Returns: [{
+   *        id: 1,
+   *        title: "j1",
+   *        salary: 100,
+   *        equity: "0.1",
+   *        companyHandle: "c1",
+   *      }]
+   */
+
+  static async search(searchValues) {
+    console.log(searchValues, "search values");
+
+    const { where, values } = this.sqlForSearch(searchValues);
+    console.log(where, "where clause");
+    console.log([...values], "values");
+
+    const querySql = `
+      SELECT id, title,
+        salary, 
+        equity,
+        company_handle AS "companyHandle"
+        FROM jobs
+        WHERE ${where}
+       `;
+
+    console.log(querySql, "query");
+    const result = await db.query(querySql, [...values]);
+    console.log(result, "result");
+
+    return result.rows;
+  }
 
   /** Update company data with `data`.
    *
@@ -176,10 +215,6 @@ class Job {
 
     if (!job) throw new NotFoundError(`No company: ${id}`);
   }
-
-  
 }
-
-
 
 module.exports = Job;

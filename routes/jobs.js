@@ -50,20 +50,18 @@ router.post("/", ensureAdmin, async function (req, res, next) {
 //
 
 router.get("/", async function (req, res, next) {
-  const validator = jsonschema.validate(req.body, jobSearchSchema);
+  const validator = jsonschema.validate(req.query, jobSearchSchema);
   if (!validator.valid) {
     const errs = validator.errors.map((e) => e.stack);
     throw new BadRequestError(errs);
   }
   let jobs;
 
-  // TO DO: Refactor .findAll() to take in req.query
-  //   if (Object.keys(req.query).length > 0) {
-  //     jobs = await Job.search(req.query);
-  //   } else {
-  //     jobs = await Job.findAll();
-  //   }
-  jobs = await Job.findAll();
+  if (Object.keys(req.query).length > 0) {
+    jobs = await Job.search(req.query);
+  } else {
+    jobs = await Job.findAll();
+  }
   return res.json({ jobs });
 });
 

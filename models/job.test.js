@@ -114,74 +114,51 @@ describe("get", function () {
 });
 
 // /**************************************** search */
-// describe("search", function () {
-//   // TO DO: Update variable names to be more clear (i.e. valid vs. invalid)
-//   const dataToSearch = {
-//     minEmployees: "300",
-//     maxEmployees: "200",
-//     name: "baker",
-//   };
+describe("search", function () {
+  // TO DO: Update variable names to be more clear (i.e. valid vs. invalid)
+  const dataToSearchValid = {
+    title: "j",
+    minSalary: 250,
+    hasEquity: true,
+  };
 
-//   const dataToSearch2 = {
-//     maxEmployees: "2",
-//   };
+  const dataToSearchOne = {
+    minSalary: 250,
+  };
 
-//   const dataToSearch3 = {
-//     minEmployees: "1",
-//     maxEmployees: "3",
-//     name: "C2",
-//   };
+  const dataToSearchInvalid = {
+    title: "j",
+    maxEmployees: "3",
+    name: "C2",
+  };
 
-//   test("minEmployee greater than maxEmployee", async function () {
-//     try {
-//       await Company.search(dataToSearch);
-//       fail();
-//     } catch (err) {
-//       expect(err instanceof BadRequestError).toBeTruthy();
-//       // Expect error message...
-//     }
-//   });
+  test("find one query", async function () {
+    const response = await Job.search(dataToSearchOne);
+    expect(response).toEqual([
+      {
+        id: jobIds.Id3.id,
+        title: "j3",
+        salary: 300,
+        equity: "0.3",
+        companyHandle: "c3",
+      },
+    ]);
+  });
 
-//   test("find one query", async function () {
-//     const response = await Company.search(dataToSearch2);
+  test("find all queries", async function () {
+    const response = await Job.search(dataToSearchValid);
 
-//     expect(response).toEqual([
-//       {
-//         description: "Desc1",
-//         handle: "c1",
-//         logoUrl: "http://c1.img",
-//         name: "C1",
-//         numEmployees: 1,
-//       },
-//     ]);
-//   });
-
-//   test("find all queries", async function () {
-//     const response = await Company.search(dataToSearch3);
-
-//     expect(response).toEqual([
-//       {
-//         description: "Desc2",
-//         handle: "c2",
-//         logoUrl: "http://c2.img",
-//         name: "C2",
-//         numEmployees: 2,
-//       },
-//     ]);
-//   });
-
-//   test("find no queries", async function () {
-//     try {
-//       await Company.search({});
-//       fail();
-//     } catch (err) {
-//       expect(err instanceof BadRequestError).toBeTruthy();
-//       // Error message...
-//     }
-//   });
-
-//   // TO DO: If additional filters added
-// });
+    expect(response).toEqual([
+      {
+        id: jobIds.Id3.id,
+        title: "j3",
+        salary: 300,
+        equity: "0.3",
+        companyHandle: "c3",
+      },
+    ]);
+  });
+});
 
 // /************************************** update */
 
