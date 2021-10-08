@@ -113,9 +113,9 @@ class Job {
   //   console.log(where, "where clause");
   //   console.log([...values], "values");
 
-  //   const querySql = ` 
-  //     SELECT handle, name, 
-  //       description, num_employees AS "numEmployees", 
+  //   const querySql = `
+  //     SELECT handle, name,
+  //       description, num_employees AS "numEmployees",
   //       logo_url AS "logoUrl"
   //       FROM companies
   //       WHERE ${where}
