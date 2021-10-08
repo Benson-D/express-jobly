@@ -68,21 +68,21 @@ describe("findAll", function () {
         title: "j1",
         salary: 100,
         equity: "0.1",
-        company_handle: "c1",
+        companyHandle: "c1",
       },
       {
         id: jobIds.Id2.id,
         title: "j2",
         salary: 200,
         equity: "0.2",
-        company_handle: "c2",
+        companyHandle: "c2",
       },
       {
         id: jobIds.Id3.id,
         title: "j3",
         salary: 300,
         equity: "0.3",
-        company_handle: "c3",
+        companyHandle: "c3",
       },
     ]);
   });

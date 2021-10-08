@@ -11,6 +11,7 @@ const Job = require("../models/job");
 
 const jobUpdateSchema = require("../schemas/jobUpdate.json");
 const jobNewSchema = require("../schemas/jobNew.json");
+const jobSearchSchema = require("../schemas/jobSearch.json");
 
 const router = new express.Router();
 
@@ -49,10 +50,13 @@ router.post("/", ensureAdmin, async function (req, res, next) {
 //
 
 router.get("/", async function (req, res, next) {
+  const validator = jsonschema.validate(req.body, jobSearchSchema);
+  if (!validator.valid) {
+    const errs = validator.errors.map((e) => e.stack);
+    throw new BadRequestError(errs);
+  }
   let jobs;
-  // Adding a validator here is a convenience less than security
-  // Opportunity to convert minEmployees and maxEmployees to num
-  // here instead of Search
+
   // TO DO: Refactor .findAll() to take in req.query
   //   if (Object.keys(req.query).length > 0) {
   //     jobs = await Job.search(req.query);

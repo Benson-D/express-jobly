@@ -1,9 +1,11 @@
 const { BadRequestError } = require("../expressError");
 
 /** Function takes in two objects:
- *    TO DO: Add examples of each
  *    First object: key=value pairs of column name and update value
+ *          { minEmployees: 10, maxEmployees: 100, name: baker }
+ * 
  *    Second object: key=value pairs of JSNames and SQL names
+ *          {  numEmployees: "num_employees", logoUrl: "logo_url"}
  *
  * returns: {
  *    setCols: "first_name=$1, age=$2",
@@ -29,6 +31,7 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 
 /** Function takes an object with search criteria
  *  for minEmployees and/or maxEmployees and/or name
+ *  { minEmployees: 10, maxEmployees: 50, name: baker }
  *
  * returns: {
  *    where: `num_employees > $1

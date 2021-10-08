@@ -4,7 +4,6 @@ const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const {
   sqlForPartialUpdate,
-  sqlForByNumEmployeesOrName,
 } = require("../helpers/sql");
 
 /** Related functions for companies. */
@@ -56,7 +55,7 @@ class Job {
           title,
           salary,
           equity,
-          company_handle
+          company_handle AS "companyHandle"
            FROM jobs
            ORDER BY id`
     );
@@ -177,6 +176,10 @@ class Job {
 
     if (!job) throw new NotFoundError(`No company: ${id}`);
   }
+
+  
 }
+
+
 
 module.exports = Job;

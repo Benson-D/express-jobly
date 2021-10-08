@@ -8,20 +8,16 @@
       "minLength": 1,
       "maxLength": 20
     },
-    "salary": {
+    "minSalary": {
       "type": "integer",
       "minimum": 0
     },
-    "equity": {
-      "type": "number",
-      "maximum": 1
-    },
-    "companyHandle": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 10
+    "hasEquity": {
+      "type": "boolean"
     }
   },
   "additionalProperties": false,
-  "required": ["title", "companyHandle"]
+  "required": [
+
+  ]
 }
