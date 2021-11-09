@@ -144,7 +144,7 @@ describe("ensureAdminOrSameUser", function () {
   test("unauth if not logged in", function () {
     expect.assertions(1);
     const req = { params: { username: "test2" } };
-    const res = { locals: { user: {} }};
+    const res = { locals: { user: {} } };
 
     const next = function (err) {
       console.log(err, "error");
