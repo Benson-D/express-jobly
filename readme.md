@@ -18,7 +18,18 @@ node server.js
     
 **Backend Test**
 
-    jest -i
+```console
+jest -i
+ ```
+
+## Current features 
+- Users can view list of companies
+- Users can filter through by name or number of employees of a company
+- Users can view list of jobs 
+- An admin user can retrieve a list of all users 
+- Registration is open to all but admin users can create a user 
+- An admin user can create, update, and delete a user 
+- App utilizes RESTful routing
 
 ## Features to add
 - Allow users to submit job applications
