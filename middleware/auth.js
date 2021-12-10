@@ -5,7 +5,6 @@
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
 const { UnauthorizedError } = require("../expressError");
-const User = require("../models/user");
 
 /** Middleware: Authenticate user.
  *
@@ -66,8 +65,6 @@ function ensureAdmin(req, res, next) {
 function ensureAdminOrSameUser(req, res, next) {
   try {
     const user = req.params.username;
-    // console.log("res,", res);
-    // console.log("res.locals,", res.locals);
     // console.log("res.locals.user,", res.locals.user);
     if ((!res.locals.user) || !(res.locals.user.isAdmin || user === res.locals.user.username)){
       throw new UnauthorizedError();
